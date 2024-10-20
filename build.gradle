@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.mj'
 version = '1.0-SNAPSHOT'
-sourceCompatibility = '17'
+// sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
