@@ -10,7 +10,6 @@
         <h1 class="mb-3">My Blog</h1>
         <h4 class="mb-3">블로그에 오신 것을 환영합니다.</h4>
     </div>
-    <!--Bootstrap: container=레이아웃 중앙에 고정된 넓이./mt=margin-top  -->
     <div class="container mt-5">
         <div class="row">
             <div class="col-lg-8">
@@ -18,18 +17,13 @@
                 <input type="hidden" id="article-id" th:value="${article.id}">
                 <article>
                    <header class="mb-4">
-                        <!--Bootstrap: fw=font-weight / mb=margin-bottom  -->
                        <h1 class="fw-bolder mb-1" th:text="${article.title}"></h1>
-                       <!--Bootstrap: text-muted=text색상 밝은회색(강조안되게) / fst-italic=이택릭  -->
-                       <!--Thymeleaf: ${temporals.format(...)} = 날짜, 시간 포멧팅  -->
                        <div class="text-muted fst-italic mb-2" th:text="|Posted on ${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}|"></div>
                    </header>
                     <section class="mb-5">
-                        <!--Bootstrap: fs=font-size -->
                         <p class="fs-5 mb-4" th:text="${article.content}"></p>
                     </section>
-                    <!--Bootstrap: primary=Bootstrap의 주색(=파랑색)/secondary=bootstrap의 보조색(=회색)/sm=small -->
-                    <button type="button" class="btn btn-primary btn-sm">수정</button>
+                    <button type="button" th:onclick="|location.href='@{/new-article?id={articleId}(articleId=${article.id})}'|" class="btn btn-primary btn-sm">수정</button>
                     <button type="button" id="delete-btn" class="btn btn-secondary btn-sm">삭제</button>
                 </article>
             </div>

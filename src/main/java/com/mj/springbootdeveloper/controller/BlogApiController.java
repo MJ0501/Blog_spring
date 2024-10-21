@@ -28,13 +28,12 @@ public class BlogApiController {
     }
     @GetMapping("/api/articles/{id}")
     public ResponseEntity<ArticleResponse> findArticle(@PathVariable long id){
-        //@PathVariable = url 에서 값을 가져옴
+
         Article article = blogService.findById(id);
         return ResponseEntity.ok().body(new ArticleResponse(article));
     }
     @DeleteMapping("/api/articles/{id}")
     public ResponseEntity<Void> deleteArticle(@PathVariable long id){
-        //@PathVariable = url 에서 값을 가져옴
         blogService.delete(id);
         return ResponseEntity.ok().build();
     }
