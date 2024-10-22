@@ -1,5 +1,6 @@
 package com.mj.springbootdeveloper.config;
 
+import com.mj.springbootdeveloper.config.jwt.TokenProvider;
 import com.mj.springbootdeveloper.service.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -11,8 +12,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
@@ -22,34 +25,41 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 @EnableWebSecurity
 public class WebSecurityConfig {
     private final UserDetailService userService;
-    // sptring security 비활성화
+    private final TokenProvider tokenProvider;
+
+//    @Bean
+//    public TokenAuthenticationFilter tokenAuthenticationFilter(){
+//        return new TokenAuthenticationFilter(tokenProvider);}
+
+    // spring security 비활성화
     @Bean
     public WebSecurityCustomizer configure(){
         return (web) -> web.ignoring()
                 .requestMatchers(toH2Console())
-                // /STATIC/** 경로에 있는 모든 파일에 대해 보안 검사 안함
                 .requestMatchers(new AntPathRequestMatcher("/static/**"));
     }
     //특정 HTTP요청에 대한 웹 기반 보안 구성
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        return http.authorizeRequests(auth->auth
-                        .requestMatchers(new AntPathRequestMatcher("/login"),
-                                        new AntPathRequestMatcher("/signup"),
-                                        new AntPathRequestMatcher("/user"))
+        return http
+                // csrf 비활성화
+                .csrf(AbstractHttpConfigurer::disable)
+//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth->auth
+                    .requestMatchers(new AntPathRequestMatcher("/login"),
+                                    new AntPathRequestMatcher("/signup"),
+                                    new AntPathRequestMatcher("/user"))
+//                                    new AntPathRequestMatcher("/api/token"))
                         .permitAll()
                         .anyRequest().authenticated())
+ //                   .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                     // login (form기반)
                     .formLogin(formLogin->formLogin
                         .loginPage("/login")
                         .defaultSuccessUrl("/articles"))
-                    // logout
-                    .logout(logout->logout
+                   .logout(logout->logout
                         .logoutSuccessUrl("/login")
-                            // logout 이루 session 전체 삭제할지 여부
                         .invalidateHttpSession(true))
-                     // csrf 비활성화
-                    .csrf(AbstractHttpConfigurer::disable)
                     .build();
     }
     @Bean

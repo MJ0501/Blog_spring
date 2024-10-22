@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.mj'
 version = '1.0-SNAPSHOT'
-// sourceCompatibility = '17'
+sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
@@ -19,11 +19,16 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok:1.18.24'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 //    Spring Security사용을 위한 의존성
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     testImplementation 'org.springframework.security:spring-security-test'
+    // java JWT Library
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
 }
 
 test {
