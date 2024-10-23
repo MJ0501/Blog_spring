@@ -11,6 +11,17 @@ spring:
   h2:
     console:
       enabled: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+#            아래의 인증값들은 보안상 GIT 에 안올림
+            client-id:
+            client-secret:
+            scope:
+              - email
+              - profile
 jwt:
   issuer: dev-auth.mj.com
   secret_key: jwt_dev

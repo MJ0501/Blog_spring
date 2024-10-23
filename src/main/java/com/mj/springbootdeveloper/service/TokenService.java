@@ -15,15 +15,11 @@ public class TokenService {
     private final UserService userService;
 
     public String createNewAccessToken(String refreshToken) {
-        // RefreshToken 유효성 검증
         if(!tokenProvider.validToken(refreshToken)){
             throw new IllegalArgumentException("Unexpected token");
         }
-        // RefreshToken으로부터 userId가져옴
         Long userId = refreshTokenService.findByRefreshToken(refreshToken).getUserId();
-        // 사용자 정보 조회
         User user = userService.findById(userId);
-        // 새로운 Access token 생성(2H만 유효)
         return tokenProvider.generateToken(user, Duration.ofHours(2));
     }
 }

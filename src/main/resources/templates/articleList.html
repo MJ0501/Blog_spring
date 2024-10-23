@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>블로그 글 목록</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
 </head>
 <body>
     <div class="p-5 mb-5 text-center</> bg-light">
@@ -11,7 +11,7 @@
         <h4 class="mb-3">블로그에 오신 것을 환영합니다.</h4>
     </div>
     <div class="container">
-        <button type="button" id="create-btn" th:onclick="|location.href='@{/new-article}'|" class="btn btn-secondary vtn-sm mb-3">글 등록</button>
+        <button type="button" th:onclick="|location.href='@{/new-article}'|" class="btn btn-secondary btn-sm mb-3">글 등록</button>
         <div class="row-6" th:each="item : ${articles}">
             <div class="card">
                 <div class="card-header" th:text="${item.id}"></div>
@@ -23,8 +23,9 @@
             </div>
             <br>
         </div>
-        <button type="button" class="btn btn-secondary" onclick="location.href='/logout'">로그아웃</button>
+        <button type="button" class="btn btn-secondary" id="logout-btn">로그아웃</button>
     </div>
+    <script src="/js/token.js"></script>
     <script src="/js/article.js"></script>
 </body>
 </html>

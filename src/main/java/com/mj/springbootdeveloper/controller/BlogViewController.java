@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
-
 @Controller
 @RequiredArgsConstructor
 public class BlogViewController {
@@ -29,14 +27,14 @@ public class BlogViewController {
         return "articleList";
     }
     @GetMapping("/articles/{id}")
-    public String getArticle(@PathVariable Long id, Model model){
+    public String getArticle(@PathVariable(value="id") Long id, Model model){
         Article article = blogService.findById(id);
         model.addAttribute("article",new ArticleViewResponse(article));
         return "article";
     }
     @GetMapping("/new-article")
-    public String newArticle(@RequestParam(required = false) Long id, Model model){
-        if (id==null){
+    public String newArticle(@RequestParam(value="id", required = false) Long id, Model model){
+        if (id == null){
             model.addAttribute("article", new ArticleViewResponse());
         } else {
             Article article = blogService.findById(id);
