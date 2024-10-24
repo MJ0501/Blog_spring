@@ -24,9 +24,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         String token = getAccessToken(authorizationHeader);
 
         if(tokenProvider.validToken(token)) {
-            //JWT token에서 추출한 사용자정보로 authentication 객체 생성
             Authentication authentication = tokenProvider.getAuthentication(token);
-            //token 에서 authentication 객체 추출 후 SecurityContext에 설정
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request,response);

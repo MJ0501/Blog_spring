@@ -3,12 +3,25 @@ if(deleteButton){
     deleteButton.addEventListener('click', (event) => {
         let id = document.getElementById('article-id').value;
         function success(){
-            alert('삭제가 완료되었습니다.');
-            location.replace('/articles');
+             const successAlert = document.getElementById("successAlert");
+             successAlert.innerText = "삭제가 완료했습니다.";
+             successAlert.style.display = "inline-block";
+             setTimeout(() => {
+                successAlert.classList.add("show");
+             }, 70);
+             setTimeout(() => {
+                 successAlert.classList.add("hide");
+             }, 1800);
+             setTimeout(() => {
+                 successAlert.style.display = "none";
+                 successAlert.classList.remove("hide");
+                 location.replace("/articles");
+             }, 2500);
+
         }
         function fail(){
-            alert('삭제가 완료되었습니다.');
-            location.replace('/articles');
+            alert('삭제를 실패했습니다.');
+            location.replace("/articles");
         }
         httpRequest("DELETE", "/api/articles/"+id, null, success, fail);
     });
@@ -26,7 +39,7 @@ if (modifyButton) {
             console.error("title 요소가 존재하지 않습니다.");
             return;
         }
-        // title은 꼮 입력하기!
+
         if (!titleElement.value.trim()) {
             const alertMessage = document.getElementById("alertMessage");
             alertMessage.innerText = "제목을 입력해주세요.";
@@ -36,11 +49,24 @@ if (modifyButton) {
         }
         const body = JSON.stringify({
             title: titleElement.value,
-            content: contentValue,  // 내용은 비어 있어도 전송
+            content: contentValue,
         });
         function success() {
-            alert('수정이 완료되었습니다.');
-            location.replace("/articles/" + id);
+             const successAlert = document.getElementById("successAlert");
+             successAlert.innerText = "수정이 완료되었습니다.";
+             successAlert.style.display = "inline-block";
+             setTimeout(() => {
+                 successAlert.classList.add("show");
+             }, 70);
+             setTimeout(() => {
+                 successAlert.classList.add("hide");
+             }, 1800);
+             setTimeout(() => {
+                 successAlert.style.display = "none";
+                 successAlert.classList.remove("hide");
+                 location.replace("/articles/"+id);
+             }, 2500);
+
         }
         function fail() {
             alert('수정이 실패했습니다.');
@@ -49,7 +75,6 @@ if (modifyButton) {
         httpRequest("PUT", "/api/articles/" + id, body, success, fail);
     });
 }
-// 글 생성시에는 제목과 내용 필수입력
 const createButton = document.getElementById("create-btn");
 if (createButton) {
     createButton.addEventListener('click', event => {
@@ -70,16 +95,33 @@ if (createButton) {
         });
 
         function success() {
-            alert("등록 완료되었습니다.");
-            location.replace("/articles");
+         const successAlert = document.getElementById("successAlert");
+             successAlert.innerText = "등록이 완료되었습니다.";
+             successAlert.style.display = "inline-block";
+             setTimeout(() => {
+                 successAlert.classList.add("show");
+             }, 70);
+             setTimeout(() => {
+                 successAlert.classList.add("hide");
+             }, 1800);
+             setTimeout(() => {
+                 successAlert.style.display = "none";
+                 successAlert.classList.remove("hide");
+                 location.replace("/articles");
+             }, 2500);
         }
 
         function fail() {
-            alert("등록 실패했습니다.");
+            alert('등록이 실패했습니다.');
             location.replace("/articles");
         }
-
         httpRequest("POST", "/api/articles", body, success, fail);
+    });
+}
+const cancelButton = document.getElementById('cancel-btn');
+if (cancelButton) {
+    cancelButton.addEventListener('click', () => {
+        window.history.back();
     });
 }
 function getCookie(key){
@@ -132,20 +174,18 @@ function httpRequest(method, url, body, success, fail){
         }
     });
 }
-const logoutButton = document.getElementById('logout-btn');
+const logoutButton = document.getElementById("logout-btn");
 
 if (logoutButton) {
     logoutButton.addEventListener('click', event => {
         function success() {
-            // 로컬 스토리지에 저장된 액세스 토큰을 삭제
-            localStorage.removeItem('access_token');
+            localStorage.removeItem("access_token");
 
-            // 쿠키에 저장된 리프레시 토큰을 삭제
-            deleteCookie('refresh_token');
-            location.replace('/login');
+            deleteCookie("refresh_token");
+            location.replace("/login");
         }
         function fail() {
-            alert('로그아웃 실패했습니다.');
+            alert("로그아웃 실패했습니다.");
         }
 
         httpRequest('DELETE','/api/refresh-token', null, success, fail);

@@ -1,0 +1,21 @@
+#successAlert {
+    display: inline-block;
+    position: relative;
+    top: 40px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    background-color: #007BFF;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+#successAlert.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+#successAlert.hide {
+    opacity: 0;
+}

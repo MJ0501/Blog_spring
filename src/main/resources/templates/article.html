@@ -4,17 +4,28 @@
     <meta charset="UTF-8">
     <title>블로그 글</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <style>
+        .hover-primary:hover {
+            color: #007bff;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <div class="p-5 mb-5 text-center</> bg-light">
-        <h1 class="mb-3">My Blog</h1>
+    <div class="p-5 mb-5 text-center bg-light">
+        <h1 id="blogTitle" class="mb-3 hover-primary">My Blog</h1>
         <h4 class="mb-3">블로그에 오신 것을 환영합니다.</h4>
     </div>
+
     <div class="container mt-5">
         <div class="row">
             <div class="col-lg-8">
-                <!-- 블로그 글 id 추가 -->
+                <div class="d-flex justify-content-end mb-4">
+                    <button type="button" th:onclick="|location.href='@{/new-article?id={articleId}(articleId=${article.id})}'|" class="btn btn-primary btn-sm">수정</button>
+                    <button type="button" id="delete-btn" class="btn btn-secondary btn-sm ml-1">삭제</button>
+                </div>
                 <input type="hidden" id="article-id" th:value="${article.id}">
+                <div id="successAlert" class="alert alert-success" style="display:none;"></div>
                 <article>
                    <header class="mb-4">
                        <h1 class="fw-bolder mb-1" th:text="${article.title}"></h1>
@@ -23,12 +34,16 @@
                     <section class="mb-5">
                         <p class="fs-5 mb-4" th:text="${article.content}"></p>
                     </section>
-                    <button type="button" th:onclick="|location.href='@{/new-article?id={articleId}(articleId=${article.id})}'|" class="btn btn-primary btn-sm">수정</button>
-                    <button type="button" id="delete-btn" class="btn btn-secondary btn-sm">삭제</button>
+
                 </article>
             </div>
         </div>
     </div>
+    <script>
+        document.getElementById("blogTitle").addEventListener("click", function() {
+            window.location.href = "/articles";
+        });
+    </script>
     <script src="/js/article.js"></script>
 </body>
 </html>

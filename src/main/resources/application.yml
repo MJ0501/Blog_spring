@@ -5,9 +5,6 @@ spring:
       hibernate:
         format_sql: true
     defer-datasource-initialization: true
-  datasource:
-    url: jdbc:h2:mem:testdb
-    username: test
   h2:
     console:
       enabled: true
@@ -16,12 +13,11 @@ spring:
       client:
         registration:
           google:
-#            아래의 인증값들은 보안상 GIT 에 안올림
-            client-id:
-            client-secret:
+            client-id: x
+            client-secret: x
             scope:
               - email
               - profile
 jwt:
   issuer: dev-auth.mj.com
-  secret_key: jwt_dev
+  secret_key: x
