@@ -19,5 +19,5 @@ spring:
               - email
               - profile
 jwt:
-  issuer: dev-auth.mj.com
-  secret_key: x
+  issuer: user@gmail.com
+  secret_key: test
