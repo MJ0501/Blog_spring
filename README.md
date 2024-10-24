@@ -10,5 +10,6 @@ JDK: 17
 - JWT토큰기반  
 ## v0.2.2 2024-10-23    
 - JWT토큰기반에 OAuth 끼얹고 CRUD까지 OKOK
-- access token 지우고 refresh token 유지되나 test 내일하기  
+## 2024-10-24 
+- CI/CD작성, AWS
 
