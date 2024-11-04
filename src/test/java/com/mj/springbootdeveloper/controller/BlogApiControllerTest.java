@@ -1,6 +1,10 @@
 package com.mj.springbootdeveloper.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mj.springbootdeveloper.domain.Comment;
+import com.mj.springbootdeveloper.dto.AddCommentRequest;
+import com.mj.springbootdeveloper.repository.CommentRepository;
+import net.datafaker.Faker;
 import com.mj.springbootdeveloper.domain.Article;
 import com.mj.springbootdeveloper.domain.User;
 import com.mj.springbootdeveloper.dto.AddArticleRequest;
@@ -23,10 +27,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.net.URI;
 import java.security.Principal;
 import java.util.List;
-import java.util.Random;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,11 +51,14 @@ class BlogApiControllerTest {
     @Autowired
     UserRepository userRepository;
     User user;
+    @Autowired
+    CommentRepository commentRepository;
 
     @BeforeEach
     public void mockMvcSetUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
         blogRepository.deleteAll();
+        commentRepository.deleteAll();
     }
 
     @BeforeEach
@@ -157,6 +162,70 @@ class BlogApiControllerTest {
         Article article = blogRepository.findById(savedArticle.getId()).get();
         assertThat(article.getTitle()).isEqualTo(newTitle);
         assertThat(article.getContent()).isEqualTo(newContent);
+    }
+    @DisplayName("addArticle:title==null -> fail")
+    @Test
+    public void addArticleNullValidation() throws Exception{
+        //given
+        final String url="/api/articles";
+        final String title = null;
+        final String content = "content";
+        final AddArticleRequest userRequest = new AddArticleRequest(title, content);
+        final String requestBody = objectMapper.writeValueAsString(userRequest);
+        Principal principal = Mockito.mock(Principal.class);
+        Mockito.when(principal.getName()).thenReturn("username");
+        //when
+        ResultActions result = mockMvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .principal(principal)
+                .content(requestBody));
+        //then
+        result.andExpect(status().isBadRequest());
+    }
+    @DisplayName("addArticle:SIZE(title)>10 -> fail")
+    @Test
+    public void addArticleSizeValidation() throws Exception{
+        Faker faker = new Faker();
+        final String url="/api/articles";
+        final String title=faker.lorem().characters(11);
+        final String content="content";
+        final AddArticleRequest userRequest = new AddArticleRequest(title, content);
+        final String requestBody = objectMapper.writeValueAsString(userRequest);
+        Principal principal = Mockito.mock(Principal.class);
+        Mockito.when(principal.getName()).thenReturn("username");
+        //when
+        ResultActions result = mockMvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .principal(principal)
+                .content(requestBody));
+        //then
+        result.andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("addComment")
+    @Test
+    public void addComment() throws Exception{
+        //given
+        final String url="/api/comments";
+        Article savedArticle = createDefaultArticle();
+        final Long articleId = savedArticle.getId();
+        final String content = "content";
+        final AddCommentRequest userRequest = new AddCommentRequest(articleId, content);
+        final String requestBody = objectMapper.writeValueAsString(userRequest);
+        Principal principal = Mockito.mock(Principal.class);
+        Mockito.when(principal.getName()).thenReturn("username");
+        //when
+        ResultActions result = mockMvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .principal(principal)
+                .content(requestBody));
+        //then
+        result.andExpect(status().isCreated());
+        List<Comment> comments = commentRepository.findAll();
+        assertThat(comments.size()).isEqualTo(1);
+        assertThat(comments.get(0).getArticle().getId()).isEqualTo(articleId);
+        assertThat(comments.get(0).getContent()).isEqualTo(content);
+
     }
 }
 

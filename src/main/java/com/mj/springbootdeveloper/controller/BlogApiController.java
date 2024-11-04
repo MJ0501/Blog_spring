@@ -1,13 +1,13 @@
 package com.mj.springbootdeveloper.controller;
 
 import com.mj.springbootdeveloper.domain.Article;
-import com.mj.springbootdeveloper.dto.AddArticleRequest;
-import com.mj.springbootdeveloper.dto.ArticleResponse;
-import com.mj.springbootdeveloper.dto.UpdateArticleRequest;
+import com.mj.springbootdeveloper.domain.Comment;
+import com.mj.springbootdeveloper.dto.*;
 import com.mj.springbootdeveloper.service.BlogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -18,7 +18,7 @@ import java.util.List;
 public class BlogApiController {
     private final BlogService blogService;
     @PostMapping("/api/articles")
-    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request, Principal principal){
+    public ResponseEntity<Article> addArticle(@RequestBody @Validated AddArticleRequest request, Principal principal){
         Article savedArticle = blogService.save(request,principal.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedArticle);
     }
@@ -42,5 +42,10 @@ public class BlogApiController {
     public ResponseEntity<Article> updateArticle(@PathVariable(value="id") long id, @RequestBody UpdateArticleRequest request){
         Article updatedArticle = blogService.update(id, request);
         return  ResponseEntity.ok().body(updatedArticle);
+    }
+    @PostMapping("/api/comments")
+    public ResponseEntity<AddCommentResponse> addComment(@RequestBody AddCommentRequest request, Principal principal){
+        Comment savedComment = blogService.addComment(request, principal.getName());
+        return ResponseEntity.status(HttpStatus.CREATED).body(new AddCommentResponse(savedComment));
     }
 }

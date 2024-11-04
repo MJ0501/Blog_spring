@@ -1,25 +1,21 @@
 package com.mj.springbootdeveloper.dto;
 
 import com.mj.springbootdeveloper.domain.Article;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import com.mj.springbootdeveloper.domain.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
-public class AddArticleRequest {
-    @NotNull
-    @Size(min=1, max = 10)
-    private String title;
-    @NotNull
+@AllArgsConstructor
+public class AddCommentRequest {
+    private Long articleId;
     private String content;
 
-    public Article toEntity(String author){
-        return Article.builder()
-                .title(title)
+    public Comment toEntity(String author, Article article){
+        return Comment.builder()
+                .article(article)
                 .content(content)
                 .author(author)
                 .build();

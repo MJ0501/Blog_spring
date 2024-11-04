@@ -124,6 +124,32 @@ if (cancelButton) {
         window.history.back();
     });
 }
+const commentCreateButton = document.getElementById('comment-create-btn');
+if(commentCreateButton){
+    commentCreateButton.addEventListener('click',()=>{
+        articleId = document.getElementById('article-id').value;
+        body = JSON.stringify({
+            articleId: articleId,
+            content: document.getElementById('content').value
+        });
+        if(!content.trim()){
+            alert('댓글 내용을 입력해 주세요.');
+            return;
+        }
+        function success(){
+            alert('등록 완료되었습니다.');
+            location.replace('/articles/'+articleId);
+        };
+        function fail(){
+            console.error('Error', error);
+            alert('등록 실패했습니다.');
+            location.replace('/articles/'+articleId);
+        };
+        httpRequest('POST','/api/comments',body, success,fail)
+        console.log('articleId:',articleId);
+        console.log('body:',body);
+    })
+}
 function getCookie(key){
     var result = null;
     var cookie = document.cookie.split(";");
