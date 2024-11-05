@@ -1,6 +1,7 @@
 package com.mj.springbootdeveloper.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mj.springbootdeveloper.config.error.ErrorCode;
 import com.mj.springbootdeveloper.domain.Comment;
 import com.mj.springbootdeveloper.dto.AddCommentRequest;
 import com.mj.springbootdeveloper.repository.CommentRepository;
@@ -33,6 +34,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -226,6 +228,20 @@ class BlogApiControllerTest {
         assertThat(comments.get(0).getArticle().getId()).isEqualTo(articleId);
         assertThat(comments.get(0).getContent()).isEqualTo(content);
 
+    }
+    @DisplayName("잘못된HTTP메서드로 아티클 조회시 실패")
+    @Test
+    public void invalidHttpMethod() throws Exception{
+        //given
+        final String url ="/api/articles/{id}";
+        final long invalidId = 1;
+
+        //when
+        final ResultActions result = mockMvc.perform(get(url,invalidId));
+        //then
+        result.andDo(print()).andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value(ErrorCode.ARTICLE_NOT_FOUND.getMessage()))
+                .andExpect(jsonPath("$.code").value(ErrorCode.ARTICLE_NOT_FOUND.getCode()));
     }
 }
 

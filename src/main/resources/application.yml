@@ -22,4 +22,4 @@ spring:
               - profile
 jwt:
   issuer: user@gmail.com
-  secret_key: x
+  secret_key:

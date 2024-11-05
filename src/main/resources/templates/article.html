@@ -10,11 +10,12 @@
             cursor: pointer;
         }
     </style>
+    <input type="hidden" id="current-author" value="Logged-in-User-Name">
 </head>
 <body>
     <div class="p-5 mb-5 text-center bg-light">
-        <h1 id="blogTitle" class="mb-3 hover-primary">My Blog</h1>
-        <h4 class="mb-3">블로그에 오신 것을 환영합니다.</h4>
+        <h1 id="blogTitle" class="mb-3 hover-primary">담벼락</h1>
+        <h4 class="mb-3">끄적끄적</h4>
     </div>
 
     <div class="container mt-5">
@@ -39,19 +40,12 @@
                 <section class="mb-5 mt-5">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">댓글 추가</h5>
+                            <h5 class="card-title">댓글</h5>
                             <div class="mb-3">
                                 <textarea id="content" class="form-control" rows="3"></textarea>
                             </div>
-                            <button type="button" id="comment-create-btn" class="btn btn-primary">댓글 추가</button>
-                        </div>
-                    </div>
-                </section>
-                <section class="mb-3" th:each="comment : ${article.comments}">
-                    <div class="card mb-1">
-                        <div class="card-body">
-                            <div class="text-muted fst-italic mb-2" th:text="|Commented on ${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')} By ${comment.author}|"></div>
-                            <p class="card-text" th:text="${comment.content}"></p>
+<!--                            <button type="button" id="cancel-btn" class="btn btn-secondary btn-sm ml-1">취소</button>-->
+                            <button type="button" id="comment-create-btn" class="btn btn-primary btn-sm ml-1">등록</button>
                         </div>
                     </div>
                 </section>

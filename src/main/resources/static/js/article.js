@@ -1,3 +1,14 @@
+const author = document.getElementById('current-author').value;
+const currentDate = new Date();
+const formattedDate = currentDate.toLocaleString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+});
+
 const deleteButton = document.getElementById('delete-btn');
 if(deleteButton){
     deleteButton.addEventListener('click', (event) => {
@@ -128,18 +139,35 @@ const commentCreateButton = document.getElementById('comment-create-btn');
 if(commentCreateButton){
     commentCreateButton.addEventListener('click',()=>{
         articleId = document.getElementById('article-id').value;
-        body = JSON.stringify({
-            articleId: articleId,
-            content: document.getElementById('content').value
-        });
+        content = document.getElementById('content').value;
+
         if(!content.trim()){
             alert('댓글 내용을 입력해 주세요.');
             return;
         }
+        body = JSON.stringify({
+            articleId: articleId,
+            content: content
+        });
         function success(){
-            alert('등록 완료되었습니다.');
-            location.replace('/articles/'+articleId);
+//            location.replace('/articles/'+articleId);
+//        };
+            const commentSection = document.querySelector('section.mb-5.mt-5');
+            const newComment = document.createElement('div');
+            newComment.classList.add('card', 'mb-1');
+
+            newComment.innerHTML = `
+            <section class="mb-3">
+                <div class="card-body">
+                    <div class="text-muted fst-italic mb-2"> Commented on ${formattedDate} By ${author}</div>
+                    <p class="card-text">${content}</p>
+                </div>
+            </section>
+            `;
+            commentSection.parentNode.insertBefore(newComment, commentSection.nextSibling);
+            document.getElementById('content').value = '';
         };
+
         function fail(){
             console.error('Error', error);
             alert('등록 실패했습니다.');
