@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @EntityListeners(AuditingEntityListener.class)
@@ -25,11 +26,17 @@ public class Article {
     private String title;
     @Column(name="content", nullable = false)
     private String content;
-    @Column(name="author", nullable = false)
-    private String author;
+
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable = false)
+    private User user;
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
+    private List<Comment> comments = new ArrayList<>();
+
     @Builder
-    public Article(String author, String title, String content) {
-        this.author = author;
+    public Article(User user, String title, String content) {
+        this.user = user;
         this.title = title;
         this.content = content;
     }
@@ -45,6 +52,4 @@ public class Article {
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
-    private List<Comment> comments;
 }

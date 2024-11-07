@@ -11,6 +11,7 @@
             cursor: pointer;
         }
     </style>
+    <input type="hidden" id="current-author" th:value="${currentUser}">
 </head>
 <body>
     <div class="p-5 mb-5 text-center bg-light">
@@ -18,13 +19,11 @@
         <h4 class="mb-3">끄적끄적</h4>
     </div>
 
-<!--    <div id="successAlert" class="alert alert-success" style="display:none;"></div>-->
     <div class="container mt-5">
         <div class="row">
             <div class="col-lg-8">
                 <article>
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <!-- 가운데에 successAlert 배치 및 높이 맞춤 -->
                         <div class="mx-auto">
                             <div id="successAlert" class="alert alert-success px-3 py-2 d-inline-block" style="display:none; height: auto;"></div>
                         </div>

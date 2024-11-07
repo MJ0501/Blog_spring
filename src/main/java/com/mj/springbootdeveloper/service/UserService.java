@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Long save(AddUserRequest dto){
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    public Long save(AddUserRequest dto, boolean isOAuthUser,String encodedPassword){
+        encodedPassword = isOAuthUser ? null : bCryptPasswordEncoder.encode(dto.getPassword());
         return userRepository.save(User.builder()
                 .email(dto.getEmail())
-                .password(encoder.encode(dto.getPassword()))
+                .password(encodedPassword)
+                .isOAuthUser(isOAuthUser)
                 .build()).getId();
     }
     public User findById(Long userId){

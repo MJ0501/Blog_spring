@@ -2,6 +2,7 @@ package com.mj.springbootdeveloper.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,14 +14,22 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", updatable = false)
     private Long id;
-    @Column(name="user_id", nullable = false, unique = true)
-    private Long userId;
+
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable = false)
+    private User user;
+
     @Column(name="refresh_token", nullable = false)
     private String refreshToken;
 
-    public RefreshToken(Long userId,String refreshToken){
-        this.userId = userId;
+    @Column(name="device_info")
+    private String deviceInfo;
+
+    @Builder
+    public RefreshToken(User user,String refreshToken, String deviceInfo){
+        this.user = user;
         this.refreshToken = refreshToken;
+        this.deviceInfo = deviceInfo;
     }
 
     public RefreshToken update(String newRefreshToken) {

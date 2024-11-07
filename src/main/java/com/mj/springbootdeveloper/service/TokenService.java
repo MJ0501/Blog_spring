@@ -18,7 +18,7 @@ public class TokenService {
         if(!tokenProvider.validToken(refreshToken)){
             throw new IllegalArgumentException("Unexpected token");
         }
-        Long userId = refreshTokenService.findByRefreshToken(refreshToken).getUserId();
+        Long userId = refreshTokenService.findByRefreshToken(refreshToken).getUser().getId();
         User user = userService.findById(userId);
         return tokenProvider.generateToken(user, Duration.ofHours(2));
     }

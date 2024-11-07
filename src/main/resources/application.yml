@@ -3,10 +3,14 @@ spring:
     show-sql: true
     properties:
       hibernate:
+        ddl-auto: update
         format_sql: true
     defer-datasource-initialization: true
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:mysql://localhost:3306/blog_db
+    username: scott
+    password: tiger
+    driver-class-name: com.mysql.cj.jdbc.Driver
   h2:
     console:
       enabled: true
@@ -22,4 +26,4 @@ spring:
               - profile
 jwt:
   issuer: user@gmail.com
-  secret_key:
+  secret_key: x

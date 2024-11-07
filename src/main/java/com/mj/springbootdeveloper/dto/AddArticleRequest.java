@@ -1,6 +1,7 @@
 package com.mj.springbootdeveloper.dto;
 
 import com.mj.springbootdeveloper.domain.Article;
+import com.mj.springbootdeveloper.domain.User;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -17,11 +18,11 @@ public class AddArticleRequest {
     @NotNull
     private String content;
 
-    public Article toEntity(String author){
+    public Article toEntity(User user){
         return Article.builder()
                 .title(title)
                 .content(content)
-                .author(author)
+                .user(user)
                 .build();
     }
 }

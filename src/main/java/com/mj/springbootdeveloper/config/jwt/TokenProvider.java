@@ -28,12 +28,12 @@ public class TokenProvider {
     public String makeToken(Date expiry, User user) {
         Date now = new Date();
         return Jwts.builder()
-                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)   // jwt type 설정
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuer(jwtProperties.getIssuer())   // iss : dev_auth.mj.com
-                .setIssuedAt(now)   // iat
-                .setExpiration(expiry)  // exp
-                .setSubject(user.getEmail())    // sub = 사용자 식별자 설정
-                .claim("id", user.getId())      // +추가 claim
+                .setIssuedAt(now)
+                .setExpiration(expiry)
+                .setSubject(user.getEmail())
+                .claim("id", user.getId())
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
     }

@@ -20,21 +20,27 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", nullable = false)
     private Long id;
-    @Column(name="author", nullable = false)
-    private String author;
+
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable= false)
+    private User user;
+
+
     @Column(name="content", nullable = false)
     private String content;
+
     @CreatedDate
     @Column(name="created_at")
     private LocalDateTime createdAt;
+
     @ManyToOne
+    @JoinColumn(name="article_id",nullable = false)
     private Article article;
+
     @Builder
-    public Comment(Article article, String author, String content){
+    public Comment(Article article, User user, String content){
         this.article = article;
-        this.author=author;
+        this.user=user;
         this.content=content;
     }
-
-
 }

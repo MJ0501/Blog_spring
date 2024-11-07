@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -31,11 +32,24 @@ public class User implements UserDetails {
     @Column(name="nickname", unique = true)
     private String nickname;
 
+    @Column(name="is_oauth_user", nullable = false)
+    private boolean isOAuthUser;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Article> articles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RefreshToken> refreshTokens= new ArrayList<>();
+
     @Builder
-    public User(String email, String password, String nickname){
+    public User(String email, String password, String nickname, boolean isOAuthUser){
         this.email = email;
         this.password = password;
-        this.nickname = nickname;
+        this.nickname = (nickname != null && !nickname.isEmpty()) ? nickname : email.split("@")[0];
+        this.isOAuthUser = isOAuthUser;
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -22,7 +22,7 @@ public class ArticleViewResponse {
         this.id = article.getId();
         this.title = article.getTitle();
         this.content = article.getContent();
-        this.author = article.getAuthor();
+        this.author = article.getUser().getNickname();
         this.createdAt =article.getCreatedAt();
         this.comments = article.getComments();
     }

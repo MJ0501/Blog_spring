@@ -20,6 +20,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+        try{
         String authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
         String token = getAccessToken(authorizationHeader);
 
@@ -27,7 +28,15 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             Authentication authentication = tokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        filterChain.doFilter(request,response);
+            filterChain.doFilter(request,response);
+        }catch (Exception e){
+            logger.error("Authentication error: ", e);
+            if(!response.isCommitted()){
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+            }
+            return;
+        }
+
     }
     private String getAccessToken(String authorizationHeader) {
         if(authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)){
